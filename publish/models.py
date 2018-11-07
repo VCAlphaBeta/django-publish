@@ -248,10 +248,10 @@ class Publishable(models.Model):
         In 1.1 through is a string and through_model has class
         In 1.2 through is the class
         '''
-        through = field_object.rel.through
+        through = field_object.remote_field.through
         if through:
             if isinstance(through, basestring):
-                return field_object.rel.through_model
+                return field_object.remote_field.through_model
             return through
         return None
     
@@ -360,7 +360,7 @@ class Publishable(models.Model):
                     continue
                 if name not in reverse_fields_to_publish:
                     continue
-                if obj.field.rel.multiple:
+                if obj.field.remote_field.multiple:
                     related_items = getattr(self, name).all()
                 else:
                     try:
@@ -373,7 +373,7 @@ class Publishable(models.Model):
                 
                 # make sure we tidy up anything that needs deleting
                 if self.public and not dry_run:
-                    if obj.field.rel.multiple:
+                    if obj.field.remote_field.multiple:
                         public_ids = [r.public_id for r in related_items]
                         deleted_items = getattr(self.public, name).exclude(pk__in=public_ids)
                         deleted_items.delete(mark_for_deletion=False)
