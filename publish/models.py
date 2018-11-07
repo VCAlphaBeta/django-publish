@@ -296,7 +296,7 @@ class Publishable(models.Model):
                 
                 value = getattr(self, field.name)
                 if isinstance(field, RelatedField):
-                    related = field.rel.to
+                    related = field.remote_field.model
                     if issubclass(related, Publishable):
                         if value is not None:
                             value = value._get_public_or_publish(dry_run=dry_run, all_published=all_published, parent=self)
@@ -339,7 +339,7 @@ class Publishable(models.Model):
                             break
                     continue # m2m via through table won't be dealt with here
 
-            related = field_object.rel.to
+            related = field_object.remote_field.model
             if issubclass(related, Publishable):
                 public_objs = [p._get_public_or_publish(dry_run=dry_run, all_published=all_published, parent=self) for p in public_objs]
             
