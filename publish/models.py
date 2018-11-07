@@ -250,7 +250,7 @@ class Publishable(models.Model):
         '''
         through = field_object.remote_field.through
         if through:
-            if isinstance(through, basestring):
+            if isinstance(through, str):
                 return field_object.remote_field.through_model
             return through
         return None
