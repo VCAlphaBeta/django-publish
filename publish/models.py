@@ -322,7 +322,10 @@ class Publishable(models.Model):
             m2m_manager = getattr(self, name)
             public_objs = list(m2m_manager.all())
 
-            field_object, model, direct, m2m = self._meta.get_field_by_name(name)
+            field_object = self._meta.get_field(name)
+            model = field_object.model
+            direct = not field_object.auto_created or field_object.concrete
+            m2m = field_object.many_to_many
             through_model = self._get_through_model(field_object)
             if through_model:
                 # see if we can work out which reverse relationship this is
